@@ -12,4 +12,8 @@
 
 .id{
     display: flex;
+    text-align: center;
+    margin-left: 38%;
+    margin-top: 2%;
+    gap: 50px;
 }
