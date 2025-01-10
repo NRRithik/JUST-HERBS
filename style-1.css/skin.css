@@ -1,0 +1,15 @@
+.bellow-hdr{
+    background-color: #800000;
+    width: 100%;
+    height: 50px;
+}
+
+.bellow-hdr h3{
+    text-align: center;
+    color: white;
+    padding:10px 0px ;
+}
+
+.id{
+    display: flex;
+}
