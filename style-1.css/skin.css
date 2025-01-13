@@ -1,3 +1,4 @@
+
 .bellow-hdr{
     background-color: #800000;
     width: 100%;
@@ -13,7 +14,15 @@
 .id{
     display: flex;
     text-align: center;
-    margin-left: 38%;
+    margin-left: 20%;
     margin-top: 2%;
     gap: 50px;
+}
+
+.prod-details{
+    margin-top: 2%;
+    margin-left: 1.5%;
+}
+.prod-details h1{
+    color: #800000;
 }

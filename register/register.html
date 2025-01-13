@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="register-style.css">
+</head>
+<body>
+    <div class="container">
+        <form action="" id="form">
+
+            <h1>Register</h1>
+
+            <div class="input-group">
+                <label for="username">username</label>
+                <input type="text" id="username" name="username" >
+                <div class="error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+                <div class="error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">password</label>
+                <input type="password" id="password" name="password">
+                <div class="error"></div>
+            </div>
+
+            <div class="input-group">
+                <button type="submit" onclick="register()">Register</button>
+            </div>
+
+            <button onclick="localStorage.clear()">clear</button>
+
+
+        </form>
+    </div>
+    
+
+
+<script>
+function register() {
+    const usrnm = document.getElementById("username").value;
+    const eml = document.getElementById("email").value;
+    const psd = document.getElementById("password").value;
+
+    if (usrnm && eml && psd) {
+        localStorage.setItem("username", usrnm);
+        localStorage.setItem("email", eml);
+        localStorage.setItem("password", psd);
+
+   
+
+        window.location.href = "../index.html";
+    } else {
+        alert("Please fill in all fields before registering.");
+    }
+}
+
+
+
+</script>
+
+</body>
+</html>
