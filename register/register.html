@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="container">
-        <form action="" id="form">
+        <form action="" id="form" onsubmit="register(event)">
 
             <h1>Register</h1>
 
@@ -29,7 +29,7 @@
             </div>
 
             <div class="input-group">
-                <button type="submit" onclick="register()">Register</button>
+                <button type="submit">Register</button>
             </div>
 
             <button onclick="localStorage.clear()">clear</button>
@@ -41,7 +41,8 @@
 
 
 <script>
-function register() {
+function register(event) {
+    event.preventDefault()
     const usrnm = document.getElementById("username").value;
     const eml = document.getElementById("email").value;
     const psd = document.getElementById("password").value;
