@@ -12,8 +12,16 @@ body{
     width: 400px;
     margin: 20vh auto 0 auto;
     background-color: whitesmoke;
-    border-radius:5px;
+    border-radius:20px;
     padding: 30px;
+    background-color: black;
+    color: white;
+ 
+}
+#form:hover{
+    transition: transform 0.5s ease;
+    transform: scale(0.95);
+    box-shadow: 10px 10px 50px black;
 }
 
 h1{
@@ -41,11 +49,16 @@ h1{
 }
 
 .input-group input{
-    border-radius:5px ;
+    border-radius:10px ;
     font-size: 20px;
     margin-top: 5px;
     padding: 10px;
     border:1px solid rgb(0, 2, 126);
+}
+
+.input-group input:hover{
+    transition: transform 1s ease;
+    transform: scale(1.04);  
 }
 
 .input-group input:focus{

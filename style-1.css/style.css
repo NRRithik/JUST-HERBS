@@ -87,10 +87,8 @@
 
 
 /* pic size reducing starts here*/
-.btm-img {
-    transition: transform 1s ease; /* Smooth transition */
-}   
 .btm-img img:hover {
+    transition: transform 0.5s ease;
     transform: scale(0.95); /* reduces image on hover */
 }
 /* pic size reducing ends here*/

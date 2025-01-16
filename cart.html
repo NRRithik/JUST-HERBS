@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart with Cloned Divs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .cart-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #000;
+        }
+        .cart-actions {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Product Cards -->
+        <div id="product1" class="card mb-5" style="width:300px">
+            <img class="card-img-top" src="https://www.justherbs.in/cdn/shop/files/2_ed9412d3-d949-4efa-bed0-4f4edebca96a_520x.jpg?v=1718005191" style="width:100%">
+            <div class="card-body">
+                <h4 class="card-title">Ayurvedic Glow Boosting Bundle</h4>
+                <p class="card-text">Contains - 4 Products</p>
+                <h6 class="card-text">MRP ₹1,230.00</h6>
+                <button class="btn btn-danger w-100" onclick="addToCart('product1')">Add to cart</button>
+            </div>
+        </div>
+
+        <div id="product2" class="card mb-5" style="width:300px">
+            <img class="card-img-top" src="https://www.justherbs.in/cdn/shop/files/2_ed9412d3-d949-4efa-bed0-4f4edebca96a_520x.jpg?v=1718005191" style="width:100%">
+            <div class="card-body">
+                <h4 class="card-title">Herbal Skincare Kit</h4>
+                <p class="card-text">Contains - 3 Products</p>
+                <h6 class="card-text">MRP ₹999.00</h6>
+                <button class="btn btn-danger w-100" onclick="addToCart('product2')">Add to cart</button>
+            </div>
+        </div>
+
+        <!-- Cart Section -->
+        <div class="cart-section">
+            <h4>Your Cart</h4>
+            <div id="cartContent">
+                <p>Cart is empty.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cart object to store products
+        const cart = {};
+
+        /**
+         * Add a product to the cart by cloning its div.
+         * @param {string} productId - The ID of the product to add.
+         */
+        function addToCart(productId) {
+            // Check if the product is already in the cart
+            if (cart[productId]) {
+                // If the product exists, just increment its quantity
+                cart[productId].quantity++;
+            } else {
+                // Clone the product div
+                const productDiv = document.getElementById(productId);
+                const clonedDiv = productDiv.cloneNode(true);
+
+                // Remove the original "Add to cart" button from the cloned div
+                const addToCartButton = clonedDiv.querySelector("button");
+                if (addToCartButton) addToCartButton.remove();
+
+                // Add quantity controls (actions) to the cloned div
+                const actionsDiv = document.createElement("div");
+                actionsDiv.className = "cart-actions";
+                actionsDiv.innerHTML = `
+                    <button class="btn btn-sm btn-success">+</button>
+                    <span>Quantity: 1</span>
+                    <button class="btn btn-sm btn-warning">-</button>
+                    <button class="btn btn-sm btn-danger">Remove</button>
+                `;
+
+                // Append the actions to the cloned div
+                clonedDiv.appendChild(actionsDiv);
+
+                // Add the product to the cart object
+                cart[productId] = {
+                    element: clonedDiv, // Store the cloned div
+                    quantity: 1 // Initialize quantity
+                };
+            }
+
+            // Update the cart display
+            renderCart();
+        }
+
+        /**
+         * Render the cart items in the cart section.
+         */
+        function renderCart() {
+            const cartContent = document.getElementById("cartContent");
+            cartContent.innerHTML = ""; // Clear the current cart content
+
+            const cartItems = Object.keys(cart); // Get all product IDs in the cart
+
+            if (cartItems.length === 0) {
+                // If the cart is empty, display a message
+                cartContent.innerHTML = "<p>Cart is empty.</p>";
+                return;
+            }
+
+            // Loop through each product in the cart
+            cartItems.forEach(productId => {
+                const { element, quantity } = cart[productId];
+
+                // Update the quantity display in the cloned div
+                const quantitySpan = element.querySelector(".cart-actions span");
+                if (quantitySpan) quantitySpan.textContent = `Quantity: ${quantity}`;
+
+                // Attach event listeners for the quantity controls
+                const [plusButton, minusButton, removeButton] = element.querySelectorAll(".cart-actions button");
+
+                // Event listener for the "+" button
+                plusButton.onclick = () => {
+                    cart[productId].quantity++; // Increment quantity
+                    renderCart(); // Re-render the cart
+                };
+
+                // Event listener for the "-" button
+                minusButton.onclick = () => {
+                    if (cart[productId].quantity > 1) {
+                        cart[productId].quantity--; // Decrement quantity
+                    } else {
+                        delete cart[productId]; // Remove the product if quantity is 0
+                    }
+                    renderCart(); // Re-render the cart
+                };
+
+                // Event listener for the "Remove" button
+                removeButton.onclick = () => {
+                    delete cart[productId]; // Remove the product from the cart
+                    renderCart(); // Re-render the cart
+                };
+
+                // Append the cloned div to the cart content
+                cartContent.appendChild(element);
+            });
+        }
+    </script>
+</body>
+</html>
