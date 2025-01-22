@@ -47,10 +47,22 @@
         </div>
 
 
+        <form id="searchForm" class="p-5">
+            <input id="searchInput" class="form-control" list="browsers" placeholder="search">
+            <datalist id="browsers">
+                <option value="Sunprotection">
+                <option value="Toners">
+                <option value="Hair oils">
+                <option value="Hair serum">
+                <option value="Body oil">
+                <option value="Body lotion">
+            </datalist>
+        </form>
+
+
         <div class="hdr-icons">
-            <i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;
             <a href="register/register.html" style="color: black;"> <i class="fa fa-sign-in" aria-hidden="true" ></i> </a>&nbsp;&nbsp;
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            <a href="#cart" style="color: black;"> <i class="fa fa-shopping-cart" aria-hidden="true"></i> </a>
         </div>
     </div>
 
@@ -63,23 +75,23 @@
 
     <div class="id">
             <!-- the ID structure starts here  -->
-        <div class="card" style="width:250px">
+        <div id="product12" class="card" style="width:250px">
             <img class="card-img-top" src="photos/skin-pic-1.webp" style="width:100%">
             <div class="card-body">
                 <h4 class="card-title">Tinted Serum Sunscreen</h4>
                 <p class="card-text">Size - 30 ml</p>
                 <h6 class="card-text">MRP ₹425.00</h6>
-                <a href="#" class="btn btn-dark w-100">Add to cart</a>
+                <a  class="btn btn-dark w-100" onclick="addToCart('product12')">Add to cart</a>
             </div>
         </div>
 
-        <div class="card" style="width:250px">
+        <div id="product13" class="card" style="width:250px">
             <img class="card-img-top" src="photos/skin-pic-2.webp" style="width:100%">
             <div class="card-body">
                 <h4 class="card-title">Moisturising Sunscreen Gel</h4>
                 <p class="card-text">Size - 50 ml</p>
-                <h6 class="card-text">MRP ₹495.00</h6>
-                <a href="#" class="btn btn-dark w-100">Add to cart</a>
+                <h6 class="card-text">MRP ₹455.00</h6>
+                <a  class="btn btn-dark w-100" onclick="addToCart('product13')">Add to cart</a>
             </div>
         </div>
         <!-- the ID structure ends here -->
@@ -93,6 +105,15 @@
 
         <h1>Physical vs Chemical Sunscreens</h1>
         <p>Summers are the time of the month when most of the people face problems like tanning, acne, rashes, uneven skin tone etc. In order to protect their skin, they try to go out less, use sun protection, use hats or scarves while going out. The question arises how safe is the chemical-based sunscreen lotions for the skin. Chemical-based sunscreen gets absorbed in the skin containing harmful ingredients such as octinoxate that cause discomfort and itchiness to the skin. Just Herbs Nosun Jojoba-Wheatgerm Moisturising Sun Protection Gel makes it the best organic sunscreen gel for the oily to combination skin type with an extremely lightweight texture that is easily absorbed by the skin. The gel is free of chemicals that give your skin nourishment without making it oily and greasy. It works as the best Ayurvedic sunscreen cream for dry skin as well.  Just Herbs Sun’nil Jojoba-Grapeseed Moisturising Sun Protection Lotion is a 2 in 1 broad-spectrum Ayurvedic sun protection lotion for normal to dry skin. It guards against sun damage and makes skin glowing.  The best Herbal sunscreen cream in India and the best herbal sunscreen for oily skin.</p>
+    </div>
+
+    <div id="cart">
+        <center><h1 style="margin-top: 2%;">YOUR CART</h1></center>
+        <div class="cart-section" >
+            <div id="cartContent" style="display: flex;gap: 15px;">
+                <h5>Your cart is empty.</h5>
+            </div>
+        </div>
     </div>
 
 
@@ -126,4 +147,131 @@
 
 
 </body>
+
+<script>
+    // cart script starts here
+
+
+// Cart object to store products
+const cart = {};
+
+/**
+ * Add a product to the cart by cloning its div.
+ * @param {string} productId - The ID of the product to add.
+ */
+function addToCart(productId) {
+    // Check if the product is already in the cart
+    if (cart[productId]) {
+        // If the product exists, just increment its quantity
+        cart[productId].quantity++;
+    } else {
+        // Clone the product div
+        const productDiv = document.getElementById(productId);
+        const clonedDiv = productDiv.cloneNode(true);
+
+        // Remove the original "Add to cart" button from the cloned div
+        const addToCartButton = clonedDiv.querySelector("button");
+        if (addToCartButton) addToCartButton.remove();
+
+        // Add quantity controls (actions) to the cloned div
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "cart-actions";
+        actionsDiv.innerHTML = `
+            <button class="btn btn-sm btn-success">+</button>
+            <span>Quantity: 1</span>
+            <button class="btn btn-sm btn-warning">-</button>
+            <button class="btn btn-sm btn-danger">Remove</button>
+        `;
+
+        // Append the actions to the cloned div
+        clonedDiv.appendChild(actionsDiv);
+
+        // Add the product to the cart object
+        cart[productId] = {
+            element: clonedDiv, // Store the cloned div
+            quantity: 1 // Initialize quantity
+        };
+    }
+
+    // Update the cart display
+    renderCart();
+}
+
+/**
+ * Render the cart items in the cart section.
+ */
+function renderCart() {
+    const cartContent = document.getElementById("cartContent");
+    cartContent.innerHTML = ""; // Clear the current cart content
+
+    const cartItems = Object.keys(cart); // Get all product IDs in the cart
+
+    if (cartItems.length === 0) {
+        // If the cart is empty, display a message
+        cartContent.innerHTML = "<p>Cart is empty.</p>";
+        return;
+    }
+
+    // Loop through each product in the cart
+    cartItems.forEach(productId => {
+        const { element, quantity } = cart[productId];
+
+        // Update the quantity display in the cloned div
+        const quantitySpan = element.querySelector(".cart-actions span");
+        if (quantitySpan) quantitySpan.textContent = `Quantity: ${quantity}`;
+
+        // Attach event listeners for the quantity controls
+        const [plusButton, minusButton, removeButton] = element.querySelectorAll(".cart-actions button");
+
+        // Event listener for the "+" button
+        plusButton.onclick = () => {
+            cart[productId].quantity++; // Increment quantity
+            renderCart(); // Re-render the cart
+        };
+
+        // Event listener for the "-" button
+        minusButton.onclick = () => {
+            if (cart[productId].quantity > 1) {
+                cart[productId].quantity--; // Decrement quantity
+            } else {
+                delete cart[productId]; // Remove the product if quantity is 0
+            }
+            renderCart(); // Re-render the cart
+        };
+
+        // Event listener for the "Remove" button
+        removeButton.onclick = () => {
+            delete cart[productId]; // Remove the product from the cart
+            renderCart(); // Re-render the cart
+        };
+
+        // Append the cloned div to the cart content
+        cartContent.appendChild(element);
+    });
+}
+    // cart script ends here
+
+        // search redirection starts here
+        // JavaScript to handle selection and redirection
+        document.getElementById('searchInput').addEventListener('change', function () {
+        const selectedValue = this.value.toLowerCase();
+        const fileMap = {
+            "sunprotection": "sunprot.html",
+            "toners" : "toners.html",
+            "hair oils": "hairoils.html",
+            "hair serum": "hairserum.html",
+            "body oil": "bodyoil.html",
+            "body lotion": "bodylotion.html"
+        };
+
+        if (fileMap[selectedValue]) {
+            // Redirect to the corresponding file
+            window.location.href = fileMap[selectedValue];
+        } else {
+            alert("No matching file for the selected option.");
+            
+        }
+    });
+    // search redirection ends here
+</script>
 </html>
